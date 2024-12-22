@@ -5,6 +5,10 @@ import Sidebar from "./components/Sidebar";
 import TrackList from "./components/TrackList";
 import Player from "./components/Player";
 
+import { data } from "./backupData";
+
+const API_KEY = process.env.REACT_APP_API_KEY || "";
+const API_HOST = process.env.REACT_APP_API_HOST || "";
 function formatTime(seconds) {
   const minutes = Math.floor(seconds / 60); // Calculate minutes
   const remainingSeconds = seconds % 60; // Calculate remaining seconds
@@ -14,7 +18,7 @@ function formatTime(seconds) {
   const formattedSeconds = String(remainingSeconds).padStart(2, "0");
 
   return `${formattedMinutes}:${formattedSeconds}`;
-};
+}
 function App() {
   const [navItem, setNavItem] = useState("For You");
   const [allSongs, setAllSongs] = useState([]);
@@ -23,20 +27,32 @@ function App() {
 
   const [favourites, setFavorites] = useState([]);
   const [recentlyPlayed, setRecentlyPlayed] = useState([]);
+  const [topSongs, setTopSongs] = useState([]);
 
-  const loadInitialData = () => {
-    const url =
-    "https://deezerdevs-deezer.p.rapidapi.com/search?q=arijit_singh";
-  const options = {
-    method: "GET",
-    headers: {
-      "x-rapidapi-key": "e5f292351cmshd1c4ca998734e82p1edd8bjsnc33e4751bf65",
-      "x-rapidapi-host": "deezerdevs-deezer.p.rapidapi.com",
-    },
+  const getTopSong = (arr) => {
+    const shuffled = [...arr].sort(() => 0.5 - Math.random());
+    const randomFive = shuffled.slice(0, 5);
+    setTopSongs(randomFive);
   };
-  fetch(url, options)
-    .then((response) => response.json())
-    .then((data) => {
+  /* initail song --api call : fallback dummy data */
+  const loadInitialData = async () => {
+    const url =
+      "https://deezerdevs-deezer.p.rapidapi.com/search?q=arijit_singh";
+    const options = {
+      method: "GET",
+      headers: {
+        "x-rapidapi-key": API_KEY,
+        "x-rapidapi-host": API_HOST,
+      },
+    };
+
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+
       const formattedData = data.data.map((track) => ({
         id: track.id,
         title: track.title,
@@ -45,12 +61,24 @@ function App() {
         audioUrl: track.preview,
         duration: formatTime(track.duration),
       }));
+
       // console.log(formattedData);
+
       setAllSongs(formattedData);
-      if(Object.keys(currentSong).length === 0) {
+      getTopSong(formattedData);
+
+      if (Object.keys(currentSong).length === 0) {
         setCurrentSong(formattedData[0]);
       }
-    });
+    } catch (error) {
+      console.error("Failed to fetch initial data:", error.message);
+      setAllSongs(data);
+      getTopSong(data);
+      if (Object.keys(currentSong).length === 0) {
+        console.log("here", data[0]);
+        setCurrentSong(data[0]);
+      }
+    }
   };
 
   /* when the app is load */
@@ -73,41 +101,24 @@ function App() {
     }
   }, []);
 
-  const handleSearchSong = async(query) => {
-    // if (query === "") return;
-    // const url = `https://deezerdevs-deezer.p.rapidapi.com/search?q=${query}`;
-    // const options = {
-    //   method: "GET",
-    //   headers: {
-    //     "x-rapidapi-key": "e5f292351cmshd1c4ca998734e82p1edd8bjsnc33e4751bf65",
-    //     "x-rapidapi-host": "deezerdevs-deezer.p.rapidapi.com",
-    //   },
-    // };
-    // fetch(url, options)
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //     const formattedData = data.data.map((track) => ({
-    //       title: track.title,
-    //       artist: track.artist.name,
-    //       coverUrl: track.album.cover_medium,
-    //       audioUrl: track.preview,
-    //     }));
-    //     setAllSongs(formattedData);
-    //   });
+  /* search */
+  const handleSearchSong = async (query) => {
+    if (query === "") {
+      loadInitialData();
+    }
     const url = `https://deezerdevs-deezer.p.rapidapi.com/search?q=${query}`;
     const options = {
       method: "GET",
       headers: {
-        "x-rapidapi-key": "e5f292351cmshd1c4ca998734e82p1edd8bjsnc33e4751bf65",
-        "x-rapidapi-host": "deezerdevs-deezer.p.rapidapi.com",
+        "x-rapidapi-key": API_KEY,
+        "x-rapidapi-host": API_HOST,
       },
     };
-  
+
     try {
       const response = await fetch(url, options);
       const data = await response.json();
-      let formattedData =  data.data.map((track) => ({
+      let formattedData = data.data.map((track) => ({
         id: track.id,
         title: track.title,
         artist: track.artist.name,
@@ -115,32 +126,20 @@ function App() {
         audioUrl: track.preview,
         duration: formatTime(track.duration),
       }));
-        setAllSongs(formattedData);
+      setAllSongs(formattedData);
     } catch (error) {
       console.error("Error fetching songs:", error);
-      return [];
+      const filteredSongs = data.filter((song) =>
+        song.title.toLowerCase().includes(query.toLowerCase())
+      );
+
+      if (filteredSongs.length) {
+        setAllSongs(filteredSongs);
+      } else {
+        setAllSongs([]);
+      }
     }
   };
-
-  // const AddToFavourites = (song) => {
-  //   let isPresent = favourites.find((favourite) => favourite.id === song.id);
-  //   if (isPresent) {
-  //     setFavorites((prev) =>
-  //       prev.filter((favourite) => favourite.id !== song.id)
-  //     );
-  //   } else {
-  //     setFavorites((prev) => [...prev, song]);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (favourites.length > 0) {
-  //     localStorage.setItem("favourites", JSON.stringify(favourites));
-  //   }
-  //   if (recentlyPlayed.length > 0) {
-  //     sessionStorage.setItem("recentlyPlayed", JSON.stringify(recentlyPlayed));
-  //   }
-  // }, [favourites, recentlyPlayed]);
 
   /* Data change according to nav Item */
   useEffect(() => {
@@ -150,6 +149,8 @@ function App() {
       setAllSongs(favourites);
     } else if (navItem === "Recently Played") {
       setAllSongs(recentlyPlayed);
+    } else if (navItem === "Top Tracks") {
+      setAllSongs(topSongs);
     }
   }, [navItem]);
 
@@ -160,7 +161,6 @@ function App() {
         navItem={navItem}
         allSongs={allSongs}
         favourites={favourites}
-        // AddToFavourites={AddToFavourites}
         currentSong={currentSong}
         setCurrentSong={setCurrentSong}
         query={query}
@@ -173,7 +173,6 @@ function App() {
         setFavorites={setFavorites}
         recentlyPlayed={recentlyPlayed}
         setRecentlyPlayed={setRecentlyPlayed}
-
         navItem={navItem}
         allSongs={allSongs}
         setCurrentSong={setCurrentSong}

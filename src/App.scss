@@ -4,11 +4,11 @@ $dimTextColor: #b3b3b3;
 
 // $BgColor2 : #
 
-$headingSize: 2.25rem;
+$headingSize: 1.5rem;
 $textBoldSize: 1.125rem;
 $subtextSize: 0.875rem;
 
-$sideBarNavItemTextSize: 1.25rem;
+$sideBarNavItemTextSize: 1.125rem;
 
 .app-container {
   display: flex;
@@ -23,11 +23,16 @@ $sideBarNavItemTextSize: 1.25rem;
   width: 20vw;
   padding: 20px;
 
-  // .spotify-logo {
-  //   font-size: 2em;
-  //   font-weight: bold;
-  //   margin-bottom: 20px;
-  // }
+  .spotify-logo {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 1.25rem;
+
+    img {
+      height: 5vh;
+    }
+  }
 
   .hamburger {
     display: none; // Hidden by default
@@ -85,7 +90,10 @@ $sideBarNavItemTextSize: 1.25rem;
   }
 
   .search-bar {
+    position: relative;
+    display: inline-block;
     margin-bottom: 20px;
+    width: 100%;
 
     input[type="text"] {
       width: 100%;
@@ -95,17 +103,23 @@ $sideBarNavItemTextSize: 1.25rem;
       background-color: #282828;
       color: #fff;
     }
+
+    button {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+
+      i {
+        color: #fff;
+      }
+    }
   }
 
   .song-list {
-
-    // overflow-y: scroll;
-    // scrollbar-width: thin;
-    // scrollbar-color: transparent transparent;
-
-    // .main-content::-webkit-scrollbar {
-    //   display: none;
-    // }
 
     .song-item {
       padding: 10px;
@@ -142,6 +156,28 @@ $sideBarNavItemTextSize: 1.25rem;
         }
       }
     }
+
+    .current-play {
+      background: linear-gradient(45deg, lightgreen, rgb(0, 0, 0));
+      background-size: 400% 400%;
+      animation: gradientAnimation 5s ease infinite;
+
+      @keyframes gradientAnimation {
+        0% {
+          background-position: 0% 50%;
+        }
+
+        50% {
+          background-position: 100% 50%;
+        }
+
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+    }
+
+
   }
 }
 
@@ -192,7 +228,7 @@ $sideBarNavItemTextSize: 1.25rem;
   .small-song-info {
     display: none;
   }
-  
+
   .controls {
     margin-top: 10px;
 
@@ -238,7 +274,7 @@ $sideBarNavItemTextSize: 1.25rem;
 // Media Queries for Smaller Screens
 @media (max-width: 768px) {
 
-  $headingSize: 2.25rem/2;
+  $headingSize: 1.5rem/2;
   $textBoldSize: 1.125rem/2;
   $subtextSize: 0.875rem/2;
 
@@ -268,18 +304,6 @@ $sideBarNavItemTextSize: 1.25rem;
       }
     }
 
-    // .hamburger {
-    //   display: block;
-    //   background-color: transparent;
-    //   border: none;
-    //   margin: 0;
-    //   padding: 0 10px 0 0;
-
-    //   i {
-    //     color: $color1;
-    //   }
-    // }
-
     .hamburger {
       display: block;
 
@@ -288,17 +312,19 @@ $sideBarNavItemTextSize: 1.25rem;
       }
     }
 
-    .nav {
-      display: none;
-    }
-
     .flex-column {
       display: none;
     }
 
-    a {
-      font-size: $sideBarNavItemTextSize;
+    .dialog {
+      position: absolute;
+      z-index: 3;
+      background-color: $BgColor1;
+      border: 1px solid #fff;
+      top: 7vh;
+      left: calc(100vw - 12rem);
     }
+
   }
 
   //main container
@@ -322,51 +348,53 @@ $sideBarNavItemTextSize: 1.25rem;
 
     .track-wrapper {
       display: block;
+
       .main-content {
         display: block;
         width: 100%;
         height: 50vh;
         padding: 2px;
-  
+
         overflow-y: scroll;
         scrollbar-width: thin;
         scrollbar-color: transparent transparent;
-  
+
         .main-content::-webkit-scrollbar {
           display: none;
         }
-  
+
         .content-type {
           font-size: $headingSize;
           margin-bottom: 0.5rem;
         }
-  
+
         .search-bar {
           margin-bottom: 10px;
-  
+
           input[type="text"] {
             width: 100%;
             padding: 5px;
             border-radius: 2.5px;
           }
         }
-  
+
         .song-list {
-  
+
           .song-item {
             padding: 5px;
             gap: 0.25rem;
-  
+
             .round-img img {
               height: 25px;
               width: 25px;
             }
-  
+
             .song-title {
               font-size: $textBoldSize;
             }
-  
+
             .song-details {
+
               .song-artist,
               .song-duration {
                 font-size: $subtextSize;
@@ -385,7 +413,7 @@ $sideBarNavItemTextSize: 1.25rem;
 
       .song-artist {
         color: $dimTextColor;
-        font-size: 16px;
+        font-size: 8px;
       }
     }
 
@@ -405,10 +433,11 @@ $sideBarNavItemTextSize: 1.25rem;
 
     .small-song-info {
       display: block;
+
       .song-title {
         font-size: $textBoldSize;
       }
-  
+
       .song-artist {
         color: $dimTextColor;
         font-size: 8px;

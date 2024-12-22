@@ -24,13 +24,14 @@ const TrackList = ({
           onChange={(e) => setQuery(e.target.value)}
           onBlur={() => handleSearchSong(query)}
         />
+        <button><i class="fa-solid fa-magnifying-glass"></i></button>        
       </div>
       {/* <div class="menu-button" onclick="toggleMenu()">☰</div> */}
-      <div className="song-list">
+      <div className="song-list" >
         {allSongs.map((song, index) => (
           <div
             key={index}
-            className="song-item"
+            className={`song-item ${currentSong && currentSong.id === song.id ?" current-play":""}`}
             onClick={() => setCurrentSong(song)}
           >
             <div className="round-img">
