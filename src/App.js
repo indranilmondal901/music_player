@@ -29,6 +29,8 @@ function App() {
   const [recentlyPlayed, setRecentlyPlayed] = useState([]);
   const [topSongs, setTopSongs] = useState([]);
 
+  const [loader, setLoader] = useState(false);
+
   const getTopSong = (arr) => {
     const shuffled = [...arr].sort(() => 0.5 - Math.random());
     const randomFive = shuffled.slice(0, 5);
@@ -36,6 +38,7 @@ function App() {
   };
   /* initail song --api call : fallback dummy data */
   const loadInitialData = async () => {
+    setLoader(true);
     const url =
       "https://deezerdevs-deezer.p.rapidapi.com/search?q=arijit_singh";
     const options = {
@@ -70,6 +73,7 @@ function App() {
       if (Object.keys(currentSong).length === 0) {
         setCurrentSong(formattedData[0]);
       }
+      setLoader(false);
     } catch (error) {
       console.error("Failed to fetch initial data:", error.message);
       setAllSongs(data);
@@ -78,6 +82,7 @@ function App() {
         // console.log("here", data[0]);
         setCurrentSong(data[0]);
       }
+      setLoader(false);
     }
   };
 
@@ -106,6 +111,7 @@ function App() {
     if (query === "") {
       loadInitialData();
     }
+    setLoader(true);
     const url = `https://deezerdevs-deezer.p.rapidapi.com/search?q=${query}`;
     const options = {
       method: "GET",
@@ -127,6 +133,7 @@ function App() {
         duration: formatTime(track.duration),
       }));
       setAllSongs(formattedData);
+      setLoader(false);
     } catch (error) {
       console.error("Error fetching songs:", error);
       const filteredSongs = data.filter((song) =>
@@ -138,6 +145,7 @@ function App() {
       } else {
         setAllSongs([]);
       }
+      setLoader(false);
     }
   };
 
@@ -158,6 +166,7 @@ function App() {
     <div className="app-container">
       <Sidebar navItem={navItem} setNavItem={setNavItem} />
       <TrackList
+      loader={loader}
         navItem={navItem}
         allSongs={allSongs}
         favourites={favourites}
