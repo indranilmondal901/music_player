@@ -75,7 +75,7 @@ function App() {
       setAllSongs(data);
       getTopSong(data);
       if (Object.keys(currentSong).length === 0) {
-        console.log("here", data[0]);
+        // console.log("here", data[0]);
         setCurrentSong(data[0]);
       }
     }
