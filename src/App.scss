@@ -1,0 +1,446 @@
+$BgColor1 : #000;
+$color1: #ffff;
+$dimTextColor: #b3b3b3;
+
+// $BgColor2 : #
+
+$headingSize: 2.25rem;
+$textBoldSize: 1.125rem;
+$subtextSize: 0.875rem;
+
+$sideBarNavItemTextSize: 1.25rem;
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: $BgColor1; // Dark background
+  color: $color1; // White text
+}
+
+//sidebar
+.sidebar {
+  width: 20vw;
+  padding: 20px;
+
+  // .spotify-logo {
+  //   font-size: 2em;
+  //   font-weight: bold;
+  //   margin-bottom: 20px;
+  // }
+
+  .hamburger {
+    display: none; // Hidden by default
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: $color1;
+    cursor: pointer;
+  }
+
+  .nav {
+    &.menu-closed {
+      display: none;
+    }
+
+    &.menu-open {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  a {
+    font-size: $sideBarNavItemTextSize;
+    color: #282828 !important;
+  }
+
+  a:hover {
+    color: #fff !important;
+    text-decoration: underline;
+  }
+
+  .active {
+    color: #fff !important;
+    text-decoration: none !important;
+  }
+}
+
+//main container
+.main-content {
+  width: 40vw;
+  flex-grow: 1;
+  padding: 20px;
+
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+
+  .main-content::-webkit-scrollbar {
+    display: none;
+  }
+
+  .content-type {
+    font-size: $headingSize;
+    margin-bottom: 1.5rem;
+  }
+
+  .search-bar {
+    margin-bottom: 20px;
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #282828;
+      color: #fff;
+    }
+  }
+
+  .song-list {
+
+    // overflow-y: scroll;
+    // scrollbar-width: thin;
+    // scrollbar-color: transparent transparent;
+
+    // .main-content::-webkit-scrollbar {
+    //   display: none;
+    // }
+
+    .song-item {
+      padding: 10px;
+      display: flex;
+      gap: 0.5rem;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #cfcfcf;
+      }
+
+      .round-img img {
+        height: 50px;
+        width: 50px;
+        border-radius: 100%;
+      }
+
+      .song-data {
+        width: 100%
+      }
+
+      .song-title {
+        font-size: $textBoldSize;
+      }
+
+      .song-details {
+        display: flex;
+        justify-content: space-between;
+
+        .song-artist,
+        .song-duration {
+          font-size: $subtextSize;
+          color: $dimTextColor;
+        }
+      }
+    }
+  }
+}
+
+// Player component
+.Player-container {
+  width: 40vw;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .hamburger-playlist {
+    display: none;
+  }
+
+  .track-wrapper {
+    display: none;
+  }
+
+  .song-info {
+    .song-title {
+      font-size: $headingSize;
+    }
+
+    .song-artist {
+      color: $dimTextColor;
+      font-size: 16px;
+    }
+  }
+
+  .album-art {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .track-wrapper {
+      display: none;
+    }
+  }
+
+  .small-song-info {
+    display: none;
+  }
+  
+  .controls {
+    margin-top: 10px;
+
+    .rhap_container {
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+      font-family: inherit;
+      width: 100%;
+      padding: 10px 15px;
+      background-color: #000 !important;
+      /* box-shadow: 0 0 3px 0 #212529; */
+      /* width: 100%; */
+
+      .rhap_volume-controls {
+        .rhap_volume-container {
+          display: flex;
+          justify-content: flex-end;
+        }
+
+        .rhap_volume-bar-area {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+.favorite-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.favorite-btn.favorited {
+  color: red;
+}
+
+
+/*---------------------------------------*/
+// Media Queries for Smaller Screens
+@media (max-width: 768px) {
+
+  $headingSize: 2.25rem/2;
+  $textBoldSize: 1.125rem/2;
+  $subtextSize: 0.875rem/2;
+
+  $sideBarNavItemTextSize: 1.25rem/2;
+
+  .app-container {
+    flex-direction: column;
+  }
+
+  //sidebar
+  .sidebar {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 10vh;
+    padding: 5px;
+    overflow: hidden;
+    border-bottom: 1px solid #fff;
+
+    .spotify-logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        height: 5vh;
+      }
+    }
+
+    // .hamburger {
+    //   display: block;
+    //   background-color: transparent;
+    //   border: none;
+    //   margin: 0;
+    //   padding: 0 10px 0 0;
+
+    //   i {
+    //     color: $color1;
+    //   }
+    // }
+
+    .hamburger {
+      display: block;
+
+      i {
+        color: $color1;
+      }
+    }
+
+    .nav {
+      display: none;
+    }
+
+    .flex-column {
+      display: none;
+    }
+
+    a {
+      font-size: $sideBarNavItemTextSize;
+    }
+  }
+
+  //main container
+  .main-content {
+    display: none;
+  }
+
+  // Player component
+  .Player-container {
+    width: 100%;
+    height: 90vh;
+    gap: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .hamburger-playlist {
+      display: block;
+    }
+
+    .track-wrapper {
+      display: block;
+      .main-content {
+        display: block;
+        width: 100%;
+        height: 50vh;
+        padding: 2px;
+  
+        overflow-y: scroll;
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent;
+  
+        .main-content::-webkit-scrollbar {
+          display: none;
+        }
+  
+        .content-type {
+          font-size: $headingSize;
+          margin-bottom: 0.5rem;
+        }
+  
+        .search-bar {
+          margin-bottom: 10px;
+  
+          input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            border-radius: 2.5px;
+          }
+        }
+  
+        .song-list {
+  
+          .song-item {
+            padding: 5px;
+            gap: 0.25rem;
+  
+            .round-img img {
+              height: 25px;
+              width: 25px;
+            }
+  
+            .song-title {
+              font-size: $textBoldSize;
+            }
+  
+            .song-details {
+              .song-artist,
+              .song-duration {
+                font-size: $subtextSize;
+                color: $dimTextColor;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .song-info {
+      .song-title {
+        font-size: $headingSize;
+      }
+
+      .song-artist {
+        color: $dimTextColor;
+        font-size: 16px;
+      }
+    }
+
+
+    .album-art {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+    }
+
+    .small-song-info {
+      display: block;
+      .song-title {
+        font-size: $textBoldSize;
+      }
+  
+      .song-artist {
+        color: $dimTextColor;
+        font-size: 8px;
+      }
+    }
+
+    .controls {
+      margin-top: 10px;
+
+      .rhap_container {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        line-height: 1;
+        font-family: inherit;
+        width: 100%;
+        padding: 10px 15px;
+        background-color: #000 !important;
+        /* box-shadow: 0 0 3px 0 #212529; */
+        /* width: 100%; */
+
+        .rhap_volume-controls {
+          .rhap_volume-container {
+            display: flex;
+            justify-content: flex-end;
+          }
+
+          .rhap_volume-bar-area {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
