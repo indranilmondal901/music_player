@@ -27,12 +27,12 @@ const TrackList = ({
           onBlur={() => handleSearchSong(query)}
         />
         <button>
-          <i class="fa-solid fa-magnifying-glass"></i>
+          <i className="fa-solid fa-magnifying-glass"></i>
         </button>
       </div>
-      {/* <div class="menu-button" onclick="toggleMenu()">☰</div> */}
+      {/* <div className="menu-button" onclick="toggleMenu()">☰</div> */}
       {loader ? (
-        <PlayAnimation/>
+        <PlayAnimation />
       ) : (
         <div className="song-list">
           {allSongs.map((song, index) => (

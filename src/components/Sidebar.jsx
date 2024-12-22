@@ -28,7 +28,7 @@ const Sidebar = ({ navItem, setNavItem }) => {
       </div>
 
       <button className="hamburger" onClick={toggleMenu}>
-        <i class="fa-solid fa-bars" color="#fff"></i>
+        <i className="fa-solid fa-bars" color="#fff"></i>
       </button>
 
       <ul className={!isMenuOpen ? "nav flex-column" : "dialog"}>

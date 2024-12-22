@@ -49,7 +49,9 @@ const Player = ({
   const AddToFavourites = (song) => {
     let isPresent = favourites.find((favourite) => favourite.id === song.id);
     if (isPresent) {
-      setFavorites((prev) => prev.filter((favourite) => favourite.id !== song.id));
+      setFavorites((prev) =>
+        prev.filter((favourite) => favourite.id !== song.id)
+      );
     } else {
       setFavorites((prev) => [...prev, song]);
     }
@@ -95,7 +97,7 @@ const Player = ({
 
   const handleNextTrack = () => {
     let findIndex = allSongs.findIndex((s) => s.id === currentSong.id);
-    if (findIndex > -1 && findIndex < allSongs.length) {
+    if (findIndex > -1 && findIndex < allSongs.length - 1) {
       setCurrentSong(allSongs[findIndex + 1]);
     } else {
       setCurrentSong(allSongs[0]);
@@ -107,7 +109,7 @@ const Player = ({
       <button className="hamburger-playlist" onClick={togglePlaylist}>
         {isPlaylistOpen ? `Hide Playlist` : `Show Playlist`}
       </button>
-      {isPlaylistOpen ? (
+      {isPlaylistOpen && (
         <div className="track-wrapper">
           <TrackList
             navItem={navItem}
@@ -120,16 +122,19 @@ const Player = ({
             handleSearchSong={handleSearchSong}
           />
         </div>
-      ) : (
-        <>
-          <div className="song-info">
-            <div className="song-title">{currentSong.title || "Please Select Song"}</div>
-            <div className="song-artist">{currentSong.artist}</div>
+      )}
+      {!isPlaylistOpen && (
+        <div className="song-info">
+          <div className="song-title">
+            {currentSong.title || "Please Select Song"}
           </div>
-          <div className="album-art">
-            <img src={currentSong.coverUrl || `/assets/cd.webp`} />
-          </div>
-        </>
+          <div className="song-artist">{currentSong.artist}</div>
+        </div>
+      )}
+      {!isPlaylistOpen && (
+        <div className="album-art">
+          <img src={currentSong.coverUrl || `/assets/cd.webp`} />
+        </div>
       )}
       <div className="controls">
         {isPlaylistOpen && (
@@ -146,7 +151,10 @@ const Player = ({
           onPlay={() => AddToRecentlyPlayed(currentSong)}
           onEnded={handleNextTrack}
           customAdditionalControls={[
-            <div key="custom-button" style={{ position: "relative", zIndex: 1 }}>
+            <div
+              key="custom-button"
+              style={{ position: "relative", zIndex: 1 }}
+            >
               <button
                 onClick={handleOptionButtonClick}
                 style={{
@@ -179,7 +187,9 @@ const Player = ({
                     zIndex: 2,
                   }}
                   className={`favorite-btn ${
-                    favourites.some((fs) => fs.id === currentSong.id) ? "favorited" : ""
+                    favourites.some((fs) => fs.id === currentSong.id)
+                      ? "favorited"
+                      : ""
                   }`}
                   onClick={(e) => {
                     e.stopPropagation();
