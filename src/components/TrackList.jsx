@@ -13,8 +13,7 @@ const TrackList = ({
   setQuery,
   handleSearchSong,
 }) => {
-  // if (allSongs.length === 0) return <h1>Loading Data.Please wait...</h1>;
-
+  if (!loader && allSongs.length === 0) return <h1>Ops!no track found.</h1>;
   return (
     <div className="main-content">
       <h3 className="content-type">{navItem || ""}</h3>
